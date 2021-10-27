@@ -1,0 +1,27 @@
+<%- include('layouts/header'); %>
+
+
+
+<% data.forEach(function(item, key) { %>
+	<% if(item.name == 'andy') { %>
+	<li><%= key%> <%= item.name %></li>
+	<% } %>
+<% }); %>
+
+
+
+<script type="text/javascript">
+
+	axios.get('/test')
+	.then(function (response) {
+		console.log(response.data);
+	})
+	.catch(function (error) {
+		console.log(error);
+	});
+
+
+</script>
+
+
+<%- include('layouts/footer'); %>
