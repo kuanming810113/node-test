@@ -4,7 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+//引入env檔
+require('dotenv').config();
+
 var indexRouter = require('./routes/index');
+
 
 var app = express();
 
@@ -28,13 +32,14 @@ var identityKey = 'skey';
 
 app.use(session({
     name: identityKey,
-    secret: 'chyingp',  // 用来对session id相关的cookie进行签名
-    store: new FileStore(),  // 本地存储session（文本文件，也可以选择其他store，比如redis的）
+    secret: '1561323',  // 用来对session id相关的cookie进行签名
+    store: new FileStore({ttl:3600*24,reapInterval: 3600*24}),  // 本地存储session（文本文件，也可以选择其他store，比如redis的）
     saveUninitialized: false,  // 是否自动保存未初始化的会话，建议false
     resave: false,  // 是否每次都重新保存会话，建议false
     cookie: {
-        maxAge: 10 * 1000  // 有效期，单位是毫秒
-    }
+        maxAge: 3600 * 24 * 1000  // 有效期，单位是毫秒
+    },
+
 }));
 
 
@@ -43,7 +48,8 @@ app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+	res.send("404");
+  //next(createError(404));
 });
 
 // error handler

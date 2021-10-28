@@ -1,4 +1,6 @@
 const { query } = require( '../helpers/db.js' );
+const jwt = require('jsonwebtoken');
+
 
 module.exports = class IndexController {
 
@@ -15,14 +17,14 @@ module.exports = class IndexController {
 		  	return dataList
 		}
 
-		async function getData() {
+		async function main() {
 		  	let userList = await userData()
 		  	let activityList = await activityData()
 
 			res.render('index', { data: userList ,title:'789'});
 		}
 
-		getData();  	
+		main();  	
         
     }
 
@@ -63,8 +65,23 @@ module.exports = class IndexController {
 		getData();  
     }
 	check(req, res ,next) {
-				
   		res.json([req.session.userid]);
 
+    }
+
+	logout(req, res ,next) {
+				
+  		req.session.destroy();
+  		res.json([req.session.userid]);
+    }	
+
+    jwt_login(req, res ,next){
+		var token = jwt.sign({ user: 'mark' }, process.env["jwt_secret"], { expiresIn: 15 }); //15秒
+		res.json([token]);
+    }
+    jwt_verify(req, res ,next){
+	    var decoded = jwt.verify(req.query.token, process.env["jwt_secret"]);
+	    // console.log('decoded = '+decoded);
+	    res.json([decoded]);
     }
 }
